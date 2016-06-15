@@ -8,4 +8,33 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="SwitcherButton">
+        <item name="android:layout_width">@dimen/switcher_size</item>
+        <item name="android:layout_height">@dimen/switcher_size</item>
+        <item name="android:background">@drawable/bg_pressed_exit_fading</item>
+    </style>
+
+    <style name="OnViewfinderLabel">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_marginTop">23dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:background">@drawable/bg_text_on_preview</item>
+    </style>
 </resources>

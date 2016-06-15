@@ -12,8 +12,6 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.ZoomControls;
 
-import com.t2m.learn.camera.R;
-
 public class ViewPhotoActivity extends Activity {
 
     ImageView mImageView;

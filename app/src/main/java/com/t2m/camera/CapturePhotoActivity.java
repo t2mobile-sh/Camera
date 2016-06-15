@@ -24,8 +24,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.t2m.learn.camera.R;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -157,8 +155,8 @@ public class CapturePhotoActivity extends Activity implements
                 if (mCamera != null) {
                     mCamera.startPreview();
                 }
-                Toast.makeText(mContext, mContext.getText(R.string.save_pic) + mFilePath,
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, mContext.getText(R.string.save_pic) + mFilePath,
+//                        Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
             }
