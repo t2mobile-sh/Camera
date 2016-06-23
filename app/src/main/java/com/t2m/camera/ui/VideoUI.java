@@ -1,9 +1,6 @@
 package com.t2m.camera.ui;
 
-import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
-import android.media.Image;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.TextureView;
@@ -128,7 +125,9 @@ public class VideoUI implements
 
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
+        if (mPreviewCover.getVisibility() != View.GONE) {
+            mPreviewCover.setVisibility(View.GONE);
+        }
     }
 
     @Override

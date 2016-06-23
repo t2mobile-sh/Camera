@@ -19,8 +19,7 @@
         android:id="@+id/preview_cover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:visibility="gone" />
+        android:background="@android:color/black" />
 
     <ImageView android:id="@+id/video_pause"
         android:layout_height="wrap_content"

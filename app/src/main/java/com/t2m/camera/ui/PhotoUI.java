@@ -1,7 +1,5 @@
 package com.t2m.camera.ui;
 
-import android.graphics.Matrix;
-import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.util.Log;
 import android.view.TextureView;
@@ -13,7 +11,6 @@ import android.widget.ImageView;
 import com.t2m.camera.CameraActivity;
 import com.t2m.camera.PhotoController;
 import com.t2m.camera.R;
-import com.t2m.camera.util.CameraUtil;
 import com.t2m.camera.view.ShutterButton;
 
 /**
@@ -59,11 +56,6 @@ public class PhotoUI
         mShutterButton.setOnShutterButtonListener(mController);
         mCameraControls = (FrameLayout) mRootView.findViewById(R.id.camera_controls);
 
-    }
-
-
-    public void showPreviewCover() {
-        mPreviewCover.setVisibility(View.VISIBLE);
     }
 
     @Override

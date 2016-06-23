@@ -5,22 +5,18 @@ import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.hardware.Camera;
+import android.hardware.camera2.CameraManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
-import android.view.OrientationEventListener;
 import android.view.Surface;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 /**
  * Created by user on 6/8/16.
@@ -87,6 +83,19 @@ public class CameraUtil {
             }
         }
         return cameraId;
+    }
+
+    public static int getCIDFromManager(Activity activity) {
+        CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                String cameraId = manager.getCameraIdList()[0];
+                return Integer.parseInt(cameraId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public static String generatePath(int type) {

@@ -35,6 +35,7 @@ public class PhotoModule
         ShutterButton.OnShutterButtonListener {
     public static final String TAG = "PhotoModule";
 
+    private static final int SCREEN_DELAY = 2 * 60 * 1000;
     private static final int START_PREVIEW = 1;
     private static final int CLEAR_SCREEN_DELAY = 3;
     private static final int SWITCH_CAMERA = 6;
@@ -204,16 +205,17 @@ public class PhotoModule
         mActivity = activity;
         mRootView = parent;
         mCameraId = CameraUtil.getCameraId();
+//        mCameraId = CameraUtil.getCIDFromManager(mActivity);
         mUI = new PhotoUI(mActivity, this, parent);
         if (mOpenCameraThread == null && !mActivity.mIsModuleSwitchInProgress) {
             mOpenCameraThread = new OpenCameraThread();
             mOpenCameraThread.start();
         }
+        keepScreenOnAwhile();
     }
 
     @Override
     public void onPauseAfterSuper() {
-        mUI.showPreviewCover();
         try {
             if (mOpenCameraThread != null) {
                 mOpenCameraThread.join();
@@ -233,6 +235,7 @@ public class PhotoModule
             mCamera.release();
             mCamera = null;
         }
+        resetScreenOn();
     }
 
     //need set mPause flag to consider the situation of return to launcher.
@@ -248,9 +251,7 @@ public class PhotoModule
 
     @Override
     public void onResumeAfterSuper() {
-        //Todo
-        if (mCamera == null && mOpenCameraThread == null &&
-                !mActivity.mIsModuleSwitchInProgress) {
+        if (mOpenCameraThread == null) {
             mOpenCameraThread = new OpenCameraThread();
             mOpenCameraThread.start();
         }
@@ -274,6 +275,17 @@ public class PhotoModule
             params.setPictureFormat(PixelFormat.JPEG);
             mCamera.setParameters(params);
         }
+    }
+
+    private void resetScreenOn() {
+        mHandler.removeMessages(CLEAR_SCREEN_DELAY);
+        mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    private void keepScreenOnAwhile() {
+        mHandler.removeMessages(CLEAR_SCREEN_DELAY);
+        mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        mHandler.sendEmptyMessageDelayed(CLEAR_SCREEN_DELAY, SCREEN_DELAY);
     }
 
     @Override

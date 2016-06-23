@@ -28,6 +28,7 @@ public class VideoModule implements
         ShutterButton.OnShutterButtonListener {
     private static final String TAG = "CAM_VideoModule";
 
+    private static final int SCREEN_DELAY = 2 * 60 * 1000;
     private static final int CHECK_DISPLAY_ROTATION = 3;
     private static final int CLEAR_SCREEN_DELAY = 4;
     private static final int UPDATE_RECORD_TIME = 5;
@@ -170,6 +171,7 @@ public class VideoModule implements
          */
         CameraOpenThread cameraOpenThread = new CameraOpenThread();
         cameraOpenThread.start();
+        keepScreenOnAwhile();
 
         // Make sure camera device is opened.
         try {
@@ -223,6 +225,7 @@ public class VideoModule implements
             mCamera.release();
             mCamera = null;
         }
+        resetScreenOn();
     }
 
     private void releasePreviewResources() {
@@ -470,5 +473,16 @@ public class VideoModule implements
     @Override
     public void onShutterButtonLongClick() {
         //Todo
+    }
+
+    private void resetScreenOn() {
+        mHandler.removeMessages(CLEAR_SCREEN_DELAY);
+        mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    private void keepScreenOnAwhile() {
+        mHandler.removeMessages(CLEAR_SCREEN_DELAY);
+        mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        mHandler.sendEmptyMessageDelayed(CLEAR_SCREEN_DELAY, SCREEN_DELAY);
     }
 }
