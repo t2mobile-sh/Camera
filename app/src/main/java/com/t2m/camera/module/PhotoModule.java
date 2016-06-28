@@ -34,7 +34,7 @@ public class PhotoModule
         Camera.AutoFocusCallback,
         ShutterButton.OnShutterButtonListener {
     public static final String TAG = "PhotoModule";
-
+    private boolean mSafeToTakePicture = false;
     private static final int SCREEN_DELAY = 2 * 60 * 1000;
     private static final int START_PREVIEW = 1;
     private static final int CLEAR_SCREEN_DELAY = 3;
@@ -89,6 +89,7 @@ public class PhotoModule
                     //notify the media is saved .
                     if (mCamera != null) {
                         mCamera.startPreview();
+                        mSafeToTakePicture = true;
                     }
                     Toast.makeText(mActivity, mActivity.getText(R.string.save_pic) + mFilePath,
                             Toast.LENGTH_SHORT).show();
@@ -165,6 +166,7 @@ public class PhotoModule
         }
 
         mCamera.startPreview();
+        mSafeToTakePicture = true;
     }
 
     private void switchCamera() {
@@ -313,7 +315,10 @@ public class PhotoModule
             return;
         }
         Log.i(TAG, "take photo started");
-        mCamera.takePicture(null, null, pictureCallback);
+        if (mSafeToTakePicture) {
+            mCamera.takePicture(null, null, pictureCallback);
+            mSafeToTakePicture = false;
+        }
     }
 
     private class ImageSaveTask extends AsyncTask<Void, Void, Uri> {

@@ -1,8 +1,12 @@
 package com.t2m.camera.util;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.hardware.Camera;
@@ -11,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Surface;
 
@@ -34,7 +39,7 @@ public class CameraUtil {
     public static final int PATH_TYPE_VIDEO = 1;
     public static final String PHOTO_POSTFIX = ".jpg";
     public static final String VIDEO_POSTFIX = ".mp4";
-
+    private static final int REQUEST_CAMERA_PERMISSION = 1;
     public interface CameraOpenErrorCallback {
         public void onCameraDisabled(int cameraId);
     }
@@ -50,6 +55,38 @@ public class CameraUtil {
         if (dpm.getCameraDisabled(null)) {
             throw new Exception();
         }
+    }
+
+    /**
+     * method for 6.0 request permissin for camera
+     * and don't forget media recorder permission
+     * @param activity
+     * @param cameraId
+     * @param handler
+     * @param cb
+     * @return camera
+     */
+    @TargetApi(Build.VERSION_CODES.M)
+    public static Camera openCameraForM(
+            Activity activity, final int cameraId,
+            Handler handler, final CameraOpenErrorCallback cb) {
+        try {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                activity.requestPermissions(new String[]{Manifest.permission.CAMERA},
+                        REQUEST_CAMERA_PERMISSION);
+            }
+            throwIfCameraDisabled(activity);
+            return android.hardware.Camera.open(cameraId);
+        } catch (Exception ex) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    cb.onCameraDisabled(cameraId);
+                }
+            });
+        }
+        return null;
     }
 
     public static Camera openCamera(
