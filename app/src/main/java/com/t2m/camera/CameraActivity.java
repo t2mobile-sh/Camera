@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class CameraActivity extends Activity implements
     private CameraModule mCurrentModule;
     public boolean mIsModuleSwitchInProgress = false;
     private ImageView mSwitcher;
+    private PowerManager.WakeLock mWakeLock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class CameraActivity extends Activity implements
     protected void onResume() {
         mCurrentModule.onResumeBeforeSuper();
         super.onResume();
+        mWakeLock.acquire();
         mCurrentModule.onResumeAfterSuper();
     }
 
@@ -49,6 +52,7 @@ public class CameraActivity extends Activity implements
     protected void onPause() {
         mCurrentModule.onPauseBeforeSuper();
         super.onPause();
+        mWakeLock.release();
         mCurrentModule.onPauseAfterSuper();
     }
 
@@ -68,6 +72,8 @@ public class CameraActivity extends Activity implements
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         mCurrentModuleIndex = PHOTO_MODULE_INDEX;
         setModuleFromIndex(mCurrentModuleIndex);
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, TAG);
     }
 
     @Override

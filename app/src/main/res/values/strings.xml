@@ -3,5 +3,5 @@
     <string name="capture">拍照</string>
     <string name="photo">照片</string>
     <string name="save_pic">the photo save to: </string>
-    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_camera">SPCamera</string>
 </resources>
